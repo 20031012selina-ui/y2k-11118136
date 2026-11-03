@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NANA STUDIO | Y2K & Y3K Cyber-Cute Brand & Logo Design Studio</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: VT323 (Pixel), Outfit, Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- Three.js (3D Geometry Canvas) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            y2k: {
+              lavender: '#E9D5FF',
+              pink: '#F472B6',
+              sky: '#38BDF8',
+              purple: '#A855F7',
+              mint: '#34D399',
+              darkPurple: '#2E1065',
+              cardBg: 'rgba(255, 255, 255, 0.85)',
+              glassBorder: 'rgba(255, 255, 255, 0.95)'
+            }
+          },
+          fontFamily: {
+            pixel: ['VT323', 'monospace'],
+            outfit: ['Outfit', 'sans-serif'],
+            sans: ['Noto Sans TC', 'sans-serif']
+          },
+          boxShadow: {
+            y2kGlow: '0 0 30px rgba(244, 114, 182, 0.45), 0 0 15px rgba(56, 189, 248, 0.35)',
+            y2kCard: '0 20px 40px rgba(168, 85, 247, 0.12), inset 0 0 0 2px rgba(255, 255, 255, 0.9)',
+            y2kButton: '0 6px 0px #C084FC, 0 10px 20px rgba(168, 85, 247, 0.25)',
+            y2kButtonActive: '0 2px 0px #C084FC, 0 4px 10px rgba(168, 85, 247, 0.2)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Global Y2K Custom Styling */
+    body {
+      background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 35%, #E0F2FE 70%, #F5D0FE 100%);
+      background-attachment: fixed;
+      font-family: 'Noto Sans TC', 'Outfit', sans-serif;
+      overflow-x: hidden;
+      color: #0F172A;
+    }
+
+    /* Grid Sparkle Overlay */
+    .bg-grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(168, 85, 247, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* Y2K Glassmorphism Window Frame */
+    .y2k-window {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 16px 36px rgba(147, 51, 234, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 1);
+      border-radius: 20px;
+    }
+
+    /* Holographic Foil Hover Effect */
+    .holographic-hover {
+      position: relative;
+      overflow: hidden;
+    }
+    .holographic-hover::before {
+      content: '';
+      position: absolute;
+      top: -150%;
+      left: -150%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.4) 40%,
+        rgba(244, 114, 182, 0.3) 50%,
+        rgba(56, 189, 248, 0.3) 60%,
+        transparent 80%
+      );
+      transition: transform 0.8s ease;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .holographic-hover:hover::before {
+      transform: translate(50%, 50%);
+    }
+
+    /* Metallic Chrome Text */
+    .chrome-text {
+      background: linear-gradient(180deg, #1E1B4B 0%, #6B21A8 40%, #A855F7 70%, #DB2777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(168, 85, 247, 0.25));
+    }
+
+    .pink-chrome-text {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FBCFE8 35%, #EC4899 70%, #831843 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(236, 72, 153, 0.3));
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F3E8FF;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #F472B6, #C084FC);
+      border-radius: 10px;
+      border: 2px solid #F3E8FF;
+    }
+
+    /* Floating Keyframes */
+    @keyframes floatSparkle {
+      0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+      50% { transform: translateY(-8px) rotate(180deg) scale(1.15); }
+    }
+    .animate-sparkle {
+      animation: floatSparkle 4s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.06); }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 3.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-grid-pattern text-slate-900 min-h-screen relative selection:bg-fuchsia-300 selection:text-purple-950">
+
+  <!-- Background Decorative Y2K Orbs -->
+  <div class="fixed top-12 left-10 w-80 h-80 bg-pink-300/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow"></div>
+  <div class="fixed top-1/2 right-10 w-96 h-96 bg-sky-300/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" style="animation-delay: 1.5s;"></div>
+  <div class="fixed bottom-10 left-1/3 w-80 h-80 bg-purple-300/40 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-glow" style="animation-delay: 0.8s;"></div>
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-gradient-to-r from-fuchsia-600 via-purple-600 to-sky-500 text-white py-2 px-4 text-center font-pixel text-lg tracking-wider shadow-sm flex items-center justify-center gap-3">
+    <span>✦✦✦ NANA STUDIO 2026 BRAND DESIGN SLOTS OPEN NOW! ✦✦✦</span>
+    <span class="hidden md:inline bg-white/20 backdrop-blur px-2.5 py-0.5 rounded-full text-xs font-sans">專為中小企業、品牌主與教育機構打造的 Y2K/Y3K 頂級品牌識別</span>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-40 px-4 md:px-8 py-3">
+    <nav class="max-w-7xl mx-auto y2k-window px-6 py-3 flex items-center justify-between shadow-sm">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-fuchsia-500 via-purple-500 to-sky-400 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <span class="text-white font-pixel text-2xl font-bold">N</span>
+        </div>
+        <div>
+          <span class="font-outfit font-black text-xl tracking-wider pink-chrome-text block leading-none">&lt;NANA_STUDIO/&gt;</span>
+          <span class="text-[10px] font-pixel text-purple-700 font-bold tracking-widest block">CYBER VISUAL LAB</span>
+        </div>
+      </a>
+
+      <!-- Menu Links -->
+      <div class="hidden md:flex items-center gap-7 font-outfit text-sm font-bold text-slate-800">
+        <a href="#services" class="hover:text-fuchsia-600 transition-colors flex items-center gap-1">✦ 服務內容</a>
+        <a href="#portfolio" class="hover:text-fuchsia-600 transition-colors flex items-center gap-1">✦ 精選作品案例</a>
+        <a href="#process" class="hover:text-fuchsia-600 transition-colors flex items-center gap-1">✦ 設計流程</a>
+        <a href="#about" class="hover:text-fuchsia-600 transition-colors flex items-center gap-1">✦ 關於我們</a>
+      </div>
+
+      <!-- CTA Button -->
+      <a href="#contact" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white font-outfit font-bold text-sm shadow-y2kButton hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center gap-2">
+        <span>開始合作</span>
+        <i class="fa-solid fa-sparkles text-xs"></i>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-24 py-8">
+
+    <!-- HERO SECTION -->
+    <section class="relative grid md:grid-cols-12 gap-8 items-center min-h-[75vh]">
+      <!-- Hero Left Text Content -->
+      <div class="md:col-span-7 space-y-6 z-10">
+        <!-- Y2K Tag Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-fuchsia-300 shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="font-pixel text-purple-800 text-base font-bold">✦ FUTURE BRANDING FOR SMEs & EDU</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-outfit font-black tracking-tight leading-none text-slate-900">
+          讓您的品牌 <br/>
+          <span class="chrome-text">耀眼突破次元</span><br/>
+          <span class="pink-chrome-text">Y2K / Y3K 視覺實驗室</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base md:text-lg text-slate-700 font-normal leading-relaxed max-w-xl">
+          NANA Studio 專為 <span class="font-bold text-purple-950 bg-fuchsia-200/80 px-1.5 py-0.5 rounded">中小企業</span>、<span class="font-bold text-purple-950 bg-fuchsia-200/80 px-1.5 py-0.5 rounded">新創品牌</span> 與 <span class="font-bold text-purple-950 bg-fuchsia-200/80 px-1.5 py-0.5 rounded">教育機構</span> 打造具備獨特記憶點的 Logo 設計與整體品牌識別 (VI) 系統。結合鍍鉻金屬感、夢幻幾何與未來科技氛圍！
+        </p>
+
+        <!-- CTAs & Stats -->
+        <div class="pt-4 flex flex-wrap items-center gap-4">
+          <a href="#portfolio" class="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-sky-400 text-white font-outfit font-bold shadow-y2kButton hover:-translate-y-1 transition-all flex items-center gap-2 text-base">
+            <i class="fa-solid fa-eye"></i>
+            <span>探索精選案例 (EXPLORE)</span>
+          </a>
+          
+          <a href="#contact" class="px-6 py-3.5 rounded-2xl bg-white/90 border-2 border-fuchsia-300 text-purple-950 font-outfit font-bold hover:bg-fuchsia-50 transition-all flex items-center gap-2 text-base shadow-sm">
+            <span>免費品牌諮詢</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+
+        <!-- Mini Value Counters -->
+        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-purple-200/70 max-w-lg">
+          <div>
+            <div class="font-pixel text-3xl font-bold text-fuchsia-600">65+</div>
+            <div class="text-xs text-slate-600 font-bold">成功案例發行</div>
+          </div>
+          <div>
+            <div class="font-pixel text-3xl font-bold text-purple-600">100%</div>
+            <div class="text-xs text-slate-600 font-bold">原創品牌標誌</div>
+          </div>
+          <div>
+            <div class="font-pixel text-3xl font-bold text-sky-600">4.9★</div>
+            <div class="text-xs text-slate-600 font-bold">客戶滿意度</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Right: Interactive 3D Canvas & Y2K OS Frame -->
+      <div class="md:col-span-5 relative">
+        <div class="y2k-window p-3 relative overflow-hidden group shadow-y2kGlow">
+          <!-- OS Header Controls Bar -->
+          <div class="bg-gradient-to-r from-purple-200 via-fuchsia-200 to-sky-200 px-3 py-1.5 rounded-t-lg flex items-center justify-between border-b border-white/80">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-pixel text-purple-950 font-bold">✦ 3D_CYBER_CRYSTAL.exe</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-pink-400 inline-block border border-white"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-300 inline-block border border-white"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block border border-white"></span>
+            </div>
+          </div>
+
+          <!-- WebGL 3D Canvas Container -->
+          <div class="relative w-full h-[380px] bg-gradient-to-b from-purple-900/10 to-sky-900/10 rounded-b-lg overflow-hidden flex items-center justify-center">
+            <canvas id="hero-3d-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+            
+            <!-- Canvas Floating Overlay Hints -->
+            <div class="absolute bottom-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[11px] font-pixel text-purple-950 border border-purple-300 pointer-events-none shadow-sm">
+              <i class="fa-solid fa-hand-pointer mr-1"></i>拖拽滑鼠可旋轉 3D 鍍鉻晶體
+            </div>
+            
+            <!-- Deco Sparkles -->
+            <div class="absolute top-4 right-4 text-2xl text-fuchsia-400 animate-sparkle pointer-events-none">✦</div>
+            <div class="absolute bottom-10 right-6 text-xl text-sky-400 animate-sparkle pointer-events-none" style="animation-delay: 1s;">♥</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: PAIN POINTS & VALUE PROPOSITION -->
+    <section id="services" class="space-y-8">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="font-pixel text-fuchsia-600 text-lg font-bold">✦ WHY NANA STUDIO ✦</span>
+        <h2 class="text-3xl md:text-4xl font-outfit font-black text-slate-900">為什麼中小企業需要全新視覺轉型？</h2>
+        <p class="text-slate-600 text-sm">我們解決品牌形象過時、辨識度不足與缺乏跨平台應用規範的痛點。</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="y2k-window p-6 rounded-2xl hover:-translate-y-1 transition-all space-y-4 border-t-4 border-fuchsia-400">
+          <div class="w-12 h-12 rounded-2xl bg-fuchsia-100 text-fuchsia-600 flex items-center justify-center text-2xl shadow-inner">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">傳統形象缺乏記憶點</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            同質化設計讓品牌隱沒於市場中。我們注入 Y2K/Y3K 的前衛未來美學，打造一見難忘的靈魂 Logo。
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="y2k-window p-6 rounded-2xl hover:-translate-y-1 transition-all space-y-4 border-t-4 border-purple-400">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl shadow-inner">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">缺乏完整 VI 系統規範</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            單一 Logo 無法滿足多平台宣傳需求。我們提供包含色彩系統、標準字與應用 Mockup 的完整手冊。
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="y2k-window p-6 rounded-2xl hover:-translate-y-1 transition-all space-y-4 border-t-4 border-sky-400">
+          <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shadow-inner">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900">教育與新創機構質感提升</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            協助教育單位、科技新創建立既具專業信任感，又兼具現代時尚風格的嶄新品牌視覺姿態。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO SHOWCASE SECTION WITH ENHANCED INTERACTIVE CARDS & MODALS -->
+    <section id="portfolio" class="space-y-8">
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="font-pixel text-fuchsia-600 text-lg font-bold">✦ SELECTED WORKS ✦</span>
+          <h2 class="text-3xl md:text-5xl font-outfit font-black text-slate-900">精選作品案例庫</h2>
+          <p class="text-slate-600 text-sm mt-1">點擊任意作品卡片即可打開完整 Y2K 專案解析（設計背景、策略、幾何規格與成果）</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex flex-wrap gap-2" id="portfolio-filters">
+          <button data-filter="all" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold font-outfit transition-all bg-fuchsia-500 text-white shadow-md">
+            ALL (全部)
+          </button>
+          <button data-filter="vi" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold font-outfit transition-all bg-white/90 text-purple-950 hover:bg-fuchsia-100 border border-purple-200">
+            BRAND IDENTITY
+          </button>
+          <button data-filter="logo" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold font-outfit transition-all bg-white/90 text-purple-950 hover:bg-fuchsia-100 border border-purple-200">
+            LOGO DESIGN
+          </button>
+          <button data-filter="digital" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold font-outfit transition-all bg-white/90 text-purple-950 hover:bg-fuchsia-100 border border-purple-200">
+            DIGITAL VISUAL
+          </button>
+          <button data-filter="packaging" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold font-outfit transition-all bg-white/90 text-purple-950 hover:bg-fuchsia-100 border border-purple-200">
+            PACKAGING
+          </button>
+        </div>
+      </div>
+
+      <!-- Portfolio Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-grid">
+
+        <!-- Portfolio Item 1 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="vi" onclick="openModal('case-1')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-purple-300 via-fuchsia-200 to-sky-200 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#E9D5FF"/>
+              <!-- Decorative Grid Lines -->
+              <path d="M0 50 H400 M0 100 H400 M0 150 H400 M0 200 H400 M0 250 H400" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
+              <path d="M50 0 V300 M100 0 V300 M150 0 V300 M200 0 V300 M250 0 V300 M300 0 V300 M350 0 V300" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
+              
+              <circle cx="200" cy="150" r="85" fill="url(#paint0_linear)" opacity="0.9"/>
+              <path d="M150 150 L250 150 M200 100 L200 200" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/>
+              <path d="M160 110 L240 190" stroke="#F472B6" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="200" cy="150" r="30" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="8 4"/>
+              
+              <defs>
+                <linearGradient id="paint0_linear" x1="120" y1="70" x2="280" y2="230" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F472B6"/>
+                  <stop offset="0.5" stop-color="#C084FC"/>
+                  <stop offset="1" stop-color="#38BDF8"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <span class="absolute top-3 left-3 bg-fuchsia-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">BRAND IDENTITY</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">CYBER MINT 賽博薄荷</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2026</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">為新創智慧健康科技品牌打造的 Y3K 液態鍍鉻標誌與全套 VI 重塑設計。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 2 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="logo" onclick="openModal('case-2')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-sky-200 via-purple-200 to-pink-200 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#E0F2FE"/>
+              <polygon points="200,50 255,145 330,145 270,195 290,285 200,230 110,285 130,195 70,145 145,145" fill="url(#paint1_linear)"/>
+              <circle cx="200" cy="165" r="32" fill="#FFFFFF" opacity="0.85"/>
+              <path d="M200 110 L200 220 M145 165 L255 165" stroke="#A855F7" stroke-width="2" stroke-dasharray="4 4"/>
+              <defs>
+                <linearGradient id="paint1_linear" x1="70" y1="50" x2="330" y2="285" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#38BDF8"/>
+                  <stop offset="0.5" stop-color="#A855F7"/>
+                  <stop offset="1" stop-color="#F472B6"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <span class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">LOGO DESIGN</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">NOVA EDU 星創教育</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2025</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">為青少年 STEAM 創新教育機構重新定義兼具幾何科技感與親和力的動態 Logo。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 3 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="digital" onclick="openModal('case-3')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-pink-300 via-purple-300 to-indigo-200 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#FCE7F3"/>
+              <rect x="70" y="50" width="260" height="200" rx="24" fill="#FFFFFF" stroke="#F472B6" stroke-width="6"/>
+              <circle cx="140" cy="130" r="40" fill="#C084FC"/>
+              <circle cx="260" cy="130" r="30" fill="#38BDF8"/>
+              <path d="M110 200 Q200 240 290 200" stroke="#EC4899" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-sky-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">DIGITAL VISUAL</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">LUNA POP 炫彩數位祭</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2025</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">數位藝術展覽的主視覺主圖、3D動態 Key Visual 與社群行銷宣傳模組。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 4 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="packaging" onclick="openModal('case-4')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-fuchsia-200 via-purple-100 to-sky-300 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#F5D0FE"/>
+              <rect x="125" y="40" width="150" height="220" rx="20" fill="#FFFFFF" stroke="#A855F7" stroke-width="5"/>
+              <rect x="145" y="75" width="110" height="90" rx="10" fill="url(#paint3_linear)"/>
+              <circle cx="200" cy="205" r="18" fill="#F472B6"/>
+              <defs>
+                <linearGradient id="paint3_linear" x1="145" y1="75" x2="255" y2="165" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F472B6"/>
+                  <stop offset="1" stop-color="#38BDF8"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">PACKAGING</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">GLOW SODA 煥彩飲品</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2026</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">為氣泡水品牌開發的全套金屬感果凍雷射包裝盒與瓶貼系統設計。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 5 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="vi" onclick="openModal('case-5')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-sky-300 via-indigo-200 to-purple-300 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#E0F2FE"/>
+              <path d="M110 230 C150 110, 250 110, 290 230" stroke="#38BDF8" stroke-width="18" stroke-linecap="round"/>
+              <circle cx="200" cy="110" r="45" fill="#C084FC"/>
+              <circle cx="200" cy="110" r="20" fill="#FFFFFF"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-fuchsia-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">BRAND IDENTITY</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">AURA METAVERSE 靈光科技</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2026</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">Web3 / 區塊鏈社群平台的幻彩流體品牌總體識別規劃。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Item 6 -->
+        <div class="portfolio-card group y2k-window p-4.5 rounded-2xl cursor-pointer holographic-hover hover:shadow-y2kGlow transition-all duration-300 transform hover:-translate-y-2 border border-purple-200/80" data-category="logo" onclick="openModal('case-6')">
+          <div class="relative overflow-hidden rounded-xl h-60 bg-gradient-to-tr from-pink-200 via-fuchsia-200 to-purple-200 mb-4 shadow-inner">
+            <svg class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" viewBox="0 0 400 300" fill="none">
+              <rect width="400" height="300" fill="#FCE7F3"/>
+              <rect x="130" y="70" width="140" height="160" rx="16" fill="none" stroke="#EC4899" stroke-width="12"/>
+              <path d="M100 150 H300" stroke="#A855F7" stroke-width="12" stroke-linecap="round"/>
+              <circle cx="200" cy="150" r="28" fill="#FFFFFF"/>
+            </svg>
+            <span class="absolute top-3 left-3 bg-purple-600 text-white text-[10px] font-bold font-pixel px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">LOGO DESIGN</span>
+            <div class="absolute inset-0 bg-purple-950/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-xs">
+              <span class="bg-white text-purple-950 text-xs font-black px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-arrow-up-right-from-square text-fuchsia-600"></i> 點擊檢視完整案例 (CASE DETAILS)
+              </span>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-black text-slate-900 group-hover:text-fuchsia-600 transition-colors">PIXEL BAKERY 像素烘焙</h3>
+              <span class="text-xs font-pixel text-purple-700 bg-purple-100 px-2 py-0.5 rounded font-bold">2025</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2">結合點陣懷舊復古與現代質感法式甜點連鎖品牌的標誌設計。</p>
+            <div class="pt-2 flex items-center justify-between border-t border-purple-100 text-xs text-fuchsia-600 font-bold">
+              <span>EXPLORE CASE STUDY ✦</span>
+              <i class="fa-solid fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: DESIGN PROCESS (4 STEPS) -->
+    <section id="process" class="space-y-8">
+      <div class="text-center max-w-xl mx-auto space-y-2">
+        <span class="font-pixel text-fuchsia-600 text-lg font-bold">✦ WORKFLOW ✦</span>
+        <h2 class="text-3xl md:text-4xl font-outfit font-black text-slate-900">標準化四大設計步驟</h2>
+        <p class="text-slate-600 text-sm">清晰透明的溝通流程，確保作品精準符合品牌定位。</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Step 1 -->
+        <div class="y2k-window p-6 rounded-2xl relative space-y-3 border-b-4 border-fuchsia-500">
+          <div class="font-pixel text-4xl font-bold text-fuchsia-600">STEP 01</div>
+          <h3 class="text-lg font-bold text-slate-900">需求深度訪談</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">分析品牌價值、目標受眾 (SMEs/教育機構) 與市場競品定位風格。</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="y2k-window p-6 rounded-2xl relative space-y-3 border-b-4 border-purple-500">
+          <div class="font-pixel text-4xl font-bold text-purple-600">STEP 02</div>
+          <h3 class="text-lg font-bold text-slate-900">策略與概念提案</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">提供 2-3 套包含 Y2K/Y3K 視覺 Moodboard 與幾何造型構想的標誌提案。</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="y2k-window p-6 rounded-2xl relative space-y-3 border-b-4 border-sky-500">
+          <div class="font-pixel text-4xl font-bold text-sky-600">STEP 03</div>
+          <h3 class="text-lg font-bold text-slate-900">細節修訂與規範</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">精密微調文字、色彩規範與 3D/2D 應用場景 Mockup 展示。</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="y2k-window p-6 rounded-2xl relative space-y-3 border-b-4 border-emerald-500">
+          <div class="font-pixel text-4xl font-bold text-emerald-600">STEP 04</div>
+          <h3 class="text-lg font-bold text-slate-900">完整 VI 檔案交付</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">輸出矢量源檔 (AI/SVG)、標準字手冊、品牌色彩 Swatches 與標準 Usage指南。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT US SECTION -->
+    <section id="about" class="y2k-window p-8 md:p-12 rounded-3xl relative overflow-hidden">
+      <div class="grid md:grid-cols-12 gap-8 items-center">
+        <div class="md:col-span-7 space-y-4">
+          <span class="font-pixel text-fuchsia-600 text-lg font-bold">✦ ABOUT NANA STUDIO ✦</span>
+          <h2 class="text-3xl md:text-4xl font-outfit font-black text-slate-900">重塑品牌視覺的新世代引路人</h2>
+          <p class="text-slate-700 text-sm leading-relaxed">
+            NANA Studio 創立於 2024 年，由熱愛 Y2K 復古美學與 Y3K 未來科技感的資深視覺設計團隊主導。我們相信，一個頂尖的品牌識別不僅僅是漂亮的圖案，更是企業與顧客之間建立強烈情緒連結的橋樑。
+          </p>
+          <div class="flex flex-wrap gap-2 pt-2">
+            <span class="px-3 py-1 rounded-full bg-fuchsia-100 text-fuchsia-800 text-xs font-bold">✦ 3D WebGL 視覺化</span>
+            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-bold">✦ 鍍鉻金屬造型</span>
+            <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold">✦ 企業 VI 系統建立</span>
+          </div>
+        </div>
+        <div class="md:col-span-5 bg-gradient-to-tr from-fuchsia-400 via-purple-300 to-sky-300 p-1 rounded-2xl shadow-md">
+          <div class="bg-white/95 p-6 rounded-xl space-y-3 font-pixel text-sm">
+            <div class="text-purple-950 font-bold text-base border-b border-purple-200 pb-2">✦ STUDIO SPECS & ENGINES</div>
+            <div class="flex justify-between text-slate-800"><span>DESIGN ENGINE:</span><span class="text-fuchsia-600 font-bold">FIGMA / ADOBE AI / C4D</span></div>
+            <div class="flex justify-between text-slate-800"><span>WEB TECH:</span><span class="text-purple-600 font-bold">THREE.JS / GSAP / TAILWIND</span></div>
+            <div class="flex justify-between text-slate-800"><span>LOCATION:</span><span class="text-sky-600 font-bold">TAIPEI / REMOTE</span></div>
+            <div class="flex justify-between text-slate-800"><span>STATUS:</span><span class="text-emerald-600 font-bold">ACCEPTING PROJECTS</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT FORM SECTION -->
+    <section id="contact" class="max-w-3xl mx-auto y2k-window p-8 md:p-10 rounded-3xl space-y-6 shadow-y2kGlow">
+      <div class="text-center space-y-2">
+        <!-- Window Title Bar -->
+        <div class="bg-gradient-to-r from-fuchsia-300 to-purple-300 py-1 px-3 rounded-lg text-xs font-pixel text-purple-950 flex justify-between items-center mb-4">
+          <span>✦ INQUIRY_FORM.exe</span>
+          <span>_ ▢ X</span>
+        </div>
+        <h2 class="text-3xl font-outfit font-black text-slate-900">預約您的品牌轉型企劃</h2>
+        <p class="text-slate-600 text-sm">填寫下表，我們將於 24 小時內安排 1 對 1 免費品牌視覺診斷。</p>
+      </div>
+
+      <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-purple-950 mb-1">您的姓名 / 貴公司名稱 *</label>
+            <input type="text" required placeholder="例如：張小明 / 創星科技" class="w-full px-4 py-3 rounded-xl bg-white/90 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-950 mb-1">電子信箱 Contact Email *</label>
+            <input type="email" required placeholder="nana@example.com" class="w-full px-4 py-3 rounded-xl bg-white/90 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 text-sm">
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-purple-950 mb-1">服務需求 Service Category</label>
+            <select class="w-full px-4 py-3 rounded-xl bg-white/90 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 text-sm text-slate-800">
+              <option>Brand Identity (完整品牌 VI 系統)</option>
+              <option>Logo Design (標誌設計/重塑)</option>
+              <option>Digital Visual (數位視覺/KV大圖)</option>
+              <option>Packaging System (產品包裝與瓶貼)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-950 mb-1">預估預算 Budget Range</label>
+            <select class="w-full px-4 py-3 rounded-xl bg-white/90 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 text-sm text-slate-800">
+              <option>NT$ 30,000 - 50,000</option>
+              <option>NT$ 50,000 - 100,000</option>
+              <option>NT$ 100,000 +</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-purple-950 mb-1">專案細節與目標 Description</label>
+          <textarea rows="4" placeholder="請簡述您的品牌現狀與期待的風格概念..." class="w-full px-4 py-3 rounded-xl bg-white/90 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 text-sm"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-sky-400 text-white font-outfit font-black text-base shadow-y2kButton hover:-translate-y-0.5 active:translate-y-0.5 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>送出品牌企劃需求 (SUBMIT PROJECT)</span>
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-20 border-t border-purple-200/80 bg-white/70 backdrop-blur py-8 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 font-pixel text-sm text-purple-950 font-bold">
+      <div>
+        © 2026 NANA STUDIO. ALL RIGHTS RESERVED. ✦ Y2K & Y3K CYBER BRAND LAB
+      </div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-fuchsia-600">INSTAGRAM</a>
+        <a href="#" class="hover:text-fuchsia-600">BEHANCE</a>
+        <a href="#" class="hover:text-fuchsia-600">DRIBBBLE</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CASE STUDY POPUP MODAL (Y2K WINDOW STYLE) -->
+  <div id="case-study-modal" class="fixed inset-0 z-50 hidden bg-purple-950/45 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="y2k-window w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 relative shadow-2xl space-y-6 my-auto animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Top Window Header Bar -->
+      <div class="bg-gradient-to-r from-fuchsia-500 via-purple-500 to-sky-400 p-3 rounded-xl flex items-center justify-between text-white font-pixel shadow-sm">
+        <span class="text-sm font-bold flex items-center gap-2" id="modal-window-title">
+          <i class="fa-solid fa-folder-open"></i> CASE_STUDY_VIEWER.exe
+        </span>
+        <button onclick="closeModal()" class="w-7 h-7 rounded-lg bg-white/20 hover:bg-white/40 flex items-center justify-center text-white transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Dynamic Case Study Content (Populated by JS) -->
+      <div id="modal-content" class="space-y-6">
+        <!-- Content inserted dynamically -->
+      </div>
+
+      <!-- Modal Footer Close Action -->
+      <div class="pt-4 border-t border-purple-200 flex justify-end">
+        <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl bg-purple-950 text-white font-bold text-xs hover:bg-purple-800 transition-colors shadow-md">
+          關閉案例視窗 (CLOSE)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC: THREE.JS 3D CANVAS, GSAP, FILTERS, ENHANCED MODAL DATA -->
+  <script>
+    /* =========================================================
+       1. ENHANCED CASE STUDY DATA STORAGE
+       ========================================================= */
+    const caseData = {
+      'case-1': {
+        title: 'CYBER MINT 賽博薄荷',
+        category: 'BRAND IDENTITY 品牌識別',
+        client: '賽博生醫科技 (CyberMint Biotech)',
+        year: '2026',
+        deliverables: 'Logo VI 手冊 / 鍍鉻 3D 質感標誌 / 企業名片 / 產品盒包裝',
+        challenge: '客戶為新創生醫科技公司，原本的標誌過於冰冷死板，無法在青年市場與生技展覽中引起關注與信任感。',
+        strategy: '導入 Y3K 液態鍍鉻有機漸層線條，結合「薄荷葉」幾何與「DNA雙螺旋」極簡元素，建立極具未來的清爽感。',
+        outcome: '成功提升品牌粉專曝光率 180%，並獲得 2026 亞洲新創視覺設計大獎提名。',
+        hexColors: ['#E9D5FF', '#F472B6', '#C084FC', '#38BDF8'],
+        colorNames: ['Lavender', 'Cyber Pink', 'Neon Purple', 'Sky Blue'],
+        fontSpec: 'Outfit Bold / Noto Sans TC Black',
+        svgGraphic: `<rect width="100%" height="240" fill="#E9D5FF" rx="12"/>
+          <path d="M0 60 H500 M0 120 H500 M0 180 H500" stroke="rgba(168,85,247,0.15)" stroke-width="1"/>
+          <circle cx="50%" cy="45%" r="75" fill="#F472B6" opacity="0.85"/>
+          <path d="M190 60 L310 180 M310 60 L190 180" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="50%" cy="45%" r="35" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="6 4"/>
+          <text x="50%" y="82%" text-anchor="middle" fill="#2E1065" font-size="22" font-family="VT323" font-weight="bold">CYBER MINT LOGO BLUEPRINT & GRID</text>`
+      },
+      'case-2': {
+        title: 'NOVA EDU 星創教育',
+        category: 'LOGO DESIGN 標誌設計',
+        client: '星創教育集團 (NOVA STEAM Group)',
+        year: '2025',
+        deliverables: '動態 Logo 標誌 / 門市招牌設計 / 校服徽章規範',
+        challenge: '身為中小企業教育機構，傳統標誌無法呈現程式設計與 STEAM 課程的現代前瞻質感。',
+        strategy: '以極光星芒與多角結晶幾何構圖，搭配柔和馬卡龍配色，消除極客硬核感，增加家長與學員的親和力。',
+        outcome: '招生季形象廣告轉換率成長 45%，成功進駐全台 12 家直營分部。',
+        hexColors: ['#E0F2FE', '#38BDF8', '#A855F7', '#F472B6'],
+        colorNames: ['Ice Sky', 'Electric Blue', 'Ultra Purple', 'Pink'],
+        fontSpec: 'VT323 Pixel / Outfit ExtraBold',
+        svgGraphic: `<rect width="100%" height="240" fill="#E0F2FE" rx="12"/>
+          <polygon points="250,30 290,110 370,110 300,150 330,220 250,170 170,220 200,150 130,110 210,110" fill="#A855F7"/>
+          <line x1="250" y1="30" x2="250" y2="220" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="4 4"/>
+          <text x="50%" y="85%" text-anchor="middle" fill="#0284C7" font-size="20" font-family="Outfit" font-weight="bold">NOVA EDU GEOMETRIC GRID SPEC</text>`
+      },
+      'case-3': {
+        title: 'LUNA POP 炫彩數位祭',
+        category: 'DIGITAL VISUAL 數位視覺',
+        client: '台北數位藝術節委員會',
+        year: '2025',
+        deliverables: '3D 展覽 Key Visual / IG 濾鏡與宣傳套件 / 戶外大螢幕動畫',
+        challenge: '展覽需要吸引 18-35 歲年輕世代與數位創作者，視覺需打破常見靜態海報框架。',
+        strategy: '打造動態 Y2K 氣泡液晶立體 Key Visual，包含可適應社群限時動態、大型戶外 LED 牆的模組化主圖。',
+        outcome: '展覽現場吸引超過 50,000 人次參觀打卡，IG 互動分享數突破 2 萬則。',
+        hexColors: ['#FCE7F3', '#EC4899', '#C084FC', '#38BDF8'],
+        colorNames: ['Bubblegum', 'Neon Pink', 'Lilac', 'Sky'],
+        fontSpec: 'VT323 Pixel / Noto Sans TC Black',
+        svgGraphic: `<rect width="100%" height="240" fill="#FCE7F3" rx="12"/>
+          <circle cx="35%" cy="45%" r="55" fill="#EC4899"/>
+          <circle cx="65%" cy="45%" r="45" fill="#38BDF8"/>
+          <path d="M120 180 Q250 230 380 180" stroke="#A855F7" stroke-width="8" stroke-linecap="round"/>
+          <text x="50%" y="85%" text-anchor="middle" fill="#9D174D" font-size="22" font-family="VT323">LUNA POP KEY VISUAL SPEC</text>`
+      },
+      'case-4': {
+        title: 'GLOW SODA 煥彩氣泡水',
+        category: 'PACKAGING 包裝系統',
+        client: '煥彩飲品股份有限公司',
+        year: '2026',
+        deliverables: '易開罐彩印規範 / 禮盒外包裝 / 瓶貼幾何刀模圖',
+        challenge: '新上市的果香氣泡水需要在一眾超市架上飲料中迅速脫穎而出。',
+        strategy: '採用銀色鍍鉻雷射反光鋁罐材質底圖，搭配透光幾何果凍標籤，賦予飲品歡快、科技感兼具的派對風格。',
+        outcome: '上架首月即售出超過 100,000 罐，成為時尚通路指定限定飲品。',
+        hexColors: ['#F5D0FE', '#F472B6', '#38BDF8', '#34D399'],
+        colorNames: ['Fuchsia Light', 'Pink', 'Cyan', 'Mint'],
+        fontSpec: 'Outfit Black / Noto Sans TC Bold',
+        svgGraphic: `<rect width="100%" height="240" fill="#F5D0FE" rx="12"/>
+          <rect x="35%" y="15%" width="30%" height="65%" rx="16" fill="#FFFFFF" stroke="#F472B6" stroke-width="5"/>
+          <text x="50%" y="50%" text-anchor="middle" fill="#C084FC" font-size="18" font-family="Outfit" font-weight="bold">GLOW SODA CAN</text>`
+      },
+      'case-5': {
+        title: 'AURA METAVERSE 靈光科技',
+        category: 'BRAND IDENTITY 品牌識別',
+        client: 'AURA Web3 Labs',
+        year: '2026',
+        deliverables: 'Web3 社群 VI 系統 / 3D 動態 Icon 庫 / 簡報 Template',
+        challenge: 'Web3 區塊鏈平台需要去除龐克過度硬核的印象，轉型為可信任的優雅未來感。',
+        strategy: '結合極簡流體光暈與金屬鍍鉻標誌，打造兼具科技深厚感與清新柔和感的全套 VI 手冊。',
+        outcome: '成功協助客戶獲得 200萬美元種子輪融資，建立一致性全球化形象。',
+        hexColors: ['#E0F2FE', '#38BDF8', '#C084FC', '#A855F7'],
+        colorNames: ['Ice Blue', 'Deep Sky', 'Light Purple', 'Violet'],
+        fontSpec: 'Outfit Medium / Noto Sans TC',
+        svgGraphic: `<rect width="100%" height="240" fill="#E0F2FE" rx="12"/>
+          <circle cx="50%" cy="45%" r="60" fill="#38BDF8"/>
+          <text x="50%" y="85%" text-anchor="middle" fill="#3B0764" font-size="20" font-family="Outfit" font-weight="bold">AURA VI SYSTEM SPEC</text>`
+      },
+      'case-6': {
+        title: 'PIXEL BAKERY 像素烘焙',
+        category: 'LOGO DESIGN 標誌設計',
+        client: '像素連鎖手作甜點',
+        year: '2025',
+        deliverables: '8-Bit 幾何標誌 / 門市包裝紙袋 / 員工圍裙標章',
+        challenge: '將懷舊復古的 8-Bit 像素風與高檔法式手作甜點結合，避免顯得平價廉價。',
+        strategy: '設計精密的幾何像素吐司與可頌標誌，選用高雅薰衣草紫與璀璨鍍鉻粉配色，創造極具衝突張力的美學。',
+        outcome: '品牌授權加盟擴展至 8 家實體店，門市打卡率提升 120%。',
+        hexColors: ['#FCE7F3', '#EC4899', '#A855F7', '#E9D5FF'],
+        colorNames: ['Soft Pink', 'Vivid Pink', 'Purple', 'Soft Lavender'],
+        fontSpec: 'VT323 Pixel / Outfit Bold',
+        svgGraphic: `<rect width="100%" height="240" fill="#FCE7F3" rx="12"/>
+          <rect x="35%" y="20%" width="30%" height="55%" fill="#EC4899" rx="8"/>
+          <text x="50%" y="85%" text-anchor="middle" fill="#7E22CE" font-size="22" font-family="VT323">PIXEL BAKERY LOGO SPEC</text>`
+      }
+    };
+
+    /* =========================================================
+       2. MODAL CONTROLLER WITH ENHANCED UI
+       ========================================================= */
+    function openModal(caseId) {
+      const data = caseData[caseId];
+      if (!data) return;
+
+      const modal = document.getElementById('case-study-modal');
+      const content = document.getElementById('modal-content');
+
+      // Generate Color Swatches HTML
+      const colorSwatchesHTML = data.hexColors.map((hex, idx) => `
+        <div class="flex flex-col items-center gap-1.5">
+          <div class="w-12 h-12 rounded-xl shadow-inner border-2 border-white transform hover:scale-110 transition-transform" style="background-color: ${hex}"></div>
+          <span class="font-pixel text-[11px] text-slate-800 font-bold">${hex}</span>
+          <span class="text-[10px] text-purple-900 font-sans">${data.colorNames[idx]}</span>
+        </div>
+      `).join('');
+
+      content.innerHTML = `
+        <!-- Case Header -->
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-fuchsia-100 text-fuchsia-800 text-xs font-bold font-pixel">${data.category}</span>
+            <span class="text-xs text-slate-700 font-pixel font-bold">CLIENT: ${data.client} | ${data.year}</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-outfit font-black text-slate-900">${data.title}</h2>
+          <div class="text-xs text-purple-900 font-semibold bg-purple-100/70 p-2 rounded-lg inline-block">
+            <i class="fa-solid fa-box-open mr-1"></i> 交付項目：${data.deliverables}
+          </div>
+        </div>
+
+        <!-- Case Visual Display -->
+        <div class="w-full bg-slate-100 rounded-xl overflow-hidden shadow-inner border border-purple-200">
+          <svg class="w-full h-auto" viewBox="0 0 500 240">
+            ${data.svgGraphic}
+          </svg>
+        </div>
+
+        <!-- Logic Section: Challenge, Strategy, Outcome -->
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-purple-50 border border-purple-200 space-y-1.5">
+            <h4 class="text-xs font-pixel font-bold text-purple-950 uppercase flex items-center gap-1.5">
+              <i class="fa-solid fa-triangle-exclamation text-fuchsia-600"></i> DESIGN CHALLENGE
+            </h4>
+            <p class="text-xs text-slate-700 leading-relaxed font-normal">${data.challenge}</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-fuchsia-50 border border-fuchsia-200 space-y-1.5">
+            <h4 class="text-xs font-pixel font-bold text-fuchsia-950 uppercase flex items-center gap-1.5">
+              <i class="fa-solid fa-chess text-purple-600"></i> STRATEGY & CONCEPT
+            </h4>
+            <p class="text-xs text-slate-700 leading-relaxed font-normal">${data.strategy}</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-sky-50 border border-sky-200 space-y-1.5">
+            <h4 class="text-xs font-pixel font-bold text-sky-950 uppercase flex items-center gap-1.5">
+              <i class="fa-solid fa-trophy text-amber-500"></i> OUTCOME & VALUE
+            </h4>
+            <p class="text-xs text-slate-700 leading-relaxed font-normal">${data.outcome}</p>
+          </div>
+        </div>
+
+        <!-- Design Specs: Palette & Typography -->
+        <div class="p-4 rounded-xl bg-white/90 border border-purple-200 space-y-3">
+          <h4 class="text-xs font-pixel font-bold text-purple-950 uppercase">✦ COLOR PALETTE & TYPOGRAPHY SPECS</h4>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              ${colorSwatchesHTML}
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-bold text-slate-800">PRIMARY TYPOGRAPHY:</div>
+              <div class="font-pixel text-fuchsia-600 text-base font-bold">${data.fontSpec}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('case-study-modal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    /* =========================================================
+       3. PORTFOLIO FILTER CONTROLLER
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const cards = document.querySelectorAll('.portfolio-card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+
+          // Style active button
+          filterBtns.forEach(b => {
+            b.classList.remove('bg-fuchsia-500', 'text-white');
+            b.classList.add('bg-white/90', 'text-purple-950');
+          });
+          btn.classList.remove('bg-white/90', 'text-purple-950');
+          btn.classList.add('bg-fuchsia-500', 'text-white');
+
+          // Filter card visibility
+          cards.forEach(card => {
+            const category = card.getAttribute('data-category');
+            if (filter === 'all' || category === filter) {
+              card.style.display = 'block';
+              gsap.fromTo(card, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.4 });
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+
+    /* =========================================================
+       4. THREE.JS 3D CANVAS (Y2K IRIDESCENT CRYSTAL GEOMETRY)
+       ========================================================= */
+    window.onload = function() {
+      const canvas = document.getElementById('hero-3d-canvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+      camera.position.z = 6;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Iridescent Crystal Geometry
+      const geometry = new THREE.IcosahedronGeometry(1.85, 0);
+      
+      // Pearl / Chrome Material
+      const material = new THREE.MeshPhongMaterial({
+        color: 0xF472B6,
+        emissive: 0x38BDF8,
+        emissiveIntensity: 0.2,
+        specular: 0xFFFFFF,
+        shininess: 120,
+        flatShading: true
+      });
+
+      const crystal = new THREE.Mesh(geometry, material);
+      scene.add(crystal);
+
+      // Inner Floating Core
+      const coreGeo = new THREE.OctahedronGeometry(0.95, 0);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true });
+      const core = new THREE.Mesh(coreGeo, coreMat);
+      scene.add(core);
+
+      // Lighting Setup
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+      scene.add(ambientLight);
+
+      const light1 = new THREE.PointLight(0xF472B6, 1.8, 50);
+      light1.position.set(5, 5, 5);
+      scene.add(light1);
+
+      const light2 = new THREE.PointLight(0x38BDF8, 1.8, 50);
+      light2.position.set(-5, -5, 5);
+      scene.add(light2);
+
+      // Interaction Variables
+      let mouseX = 0, mouseY = 0;
+      let targetRotationX = 0, targetRotationY = 0;
+
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = ((e.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+        mouseY = -((e.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+        targetRotationY = mouseX * 1.5;
+        targetRotationX = mouseY * 1.5;
+      });
+
+      // Resize Listener
+      window.addEventListener('resize', () => {
+        if (!canvas) return;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      });
+
+      // Animation Loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        crystal.rotation.y += 0.008;
+        crystal.rotation.x += 0.005;
+
+        core.rotation.y -= 0.012;
+
+        // Smooth Mouse Follow
+        crystal.rotation.y += (targetRotationY - crystal.rotation.y) * 0.05;
+        crystal.rotation.x += (targetRotationX - crystal.rotation.x) * 0.05;
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      /* =========================================================
+         5. GSAP SCROLLTRIGGER ANIMATIONS
+         ========================================================= */
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Stagger Fade-in Portfolio Cards
+      gsap.from("#portfolio .portfolio-card", {
+        scrollTrigger: {
+          trigger: "#portfolio",
+          start: "top 80%"
+        },
+        opacity: 0,
+        y: 35,
+        duration: 0.65,
+        stagger: 0.15,
+        ease: "power2.out"
+      });
+
+      gsap.from("#process .y2k-window", {
+        scrollTrigger: {
+          trigger: "#process",
+          start: "top 80%"
+        },
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.55,
+        stagger: 0.12,
+        ease: "back.out(1.7)"
+      });
+    };
+
+    /* =========================================================
+       6. FORM SUBMISSION
+       ========================================================= */
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      alert('✦ 感謝您的諮詢！NANA Studio 團隊已收到您的專案需求，我們將於 24 小時內與您聯繫！');
+      document.getElementById('contact-form').reset();
+    }
+  </script>
+</body>
+</html>
